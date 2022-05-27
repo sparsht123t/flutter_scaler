@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ScalePickerController extends ValueNotifier<num> {
+  /// Creates a controller for scale widget.
   ScalePickerController({num value = 100.0}) : super(value);
 
   num get value => super.value;
@@ -80,7 +81,9 @@ class _ScalePickerState extends State<ScalePicker> {
         : SizedBox(
             // width: 34,
             child: Stack(
-              alignment: Alignment.center,
+              alignment: widget.isInvertedScale
+                  ? Alignment.centerRight
+                  : Alignment.centerLeft,
               children: <Widget>[
                 Container(
                   width: 34,
@@ -103,6 +106,7 @@ class _ScalePickerState extends State<ScalePicker> {
     if (!widget.isAxisVertical && widget.height <= 80) {
       widget.height = 80;
     }
+    /// Jump to specific value initially
     Future.delayed(widget.animationDuration, () {
       scrollController.animateTo(
         widget.isAxisVertical
@@ -115,7 +119,7 @@ class _ScalePickerState extends State<ScalePicker> {
     currentCursorPositionValue = widget.initialValue;
     super.initState();
   }
-
+/// Change cursor position value for horizontal scrolling
   void changePositionForHorizontalScroll(double cursorPosition) {
     setState(() {
       currentCursorPositionValue = cursorPosition;
@@ -123,7 +127,7 @@ class _ScalePickerState extends State<ScalePicker> {
     });
     widget.onValueChange(cursorPosition);
   }
-
+/// Change cursor position value for vertical scrolling
   void changePositionForVerticalScroll(double cursorPosition) {
     setState(() {
       currentCursorPositionValue = cursorPosition;
@@ -131,7 +135,7 @@ class _ScalePickerState extends State<ScalePicker> {
     });
     widget.onValueChange(cursorPosition);
   }
-
+/// Horizontal List View of tick item builder
   horizontalListView() {
     return ListView.builder(
         shrinkWrap: true,
@@ -192,7 +196,7 @@ class _ScalePickerState extends State<ScalePicker> {
           );
         });
   }
-
+/// Marker of horizontal scroll
   markerForHorizontalScroll() {
     return Positioned(
       top: widget.isInvertedScale ? 0.1 : widget.height - 34,
@@ -200,7 +204,7 @@ class _ScalePickerState extends State<ScalePicker> {
       child: widget.marker ?? defaultMarker(),
     );
   }
-
+/// Marker of vertical scroll
   markerForVerticalScroll() {
     return Positioned(
       top: widget.height / 2 + 14,
@@ -209,7 +213,7 @@ class _ScalePickerState extends State<ScalePicker> {
       child: widget.marker ?? defaultMarker(isVertical: true),
     );
   }
-
+/// Vertical List View of tick item builder
   verticalListView() {
     return ListView.builder(
         shrinkWrap: true,
